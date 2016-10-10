@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Barracks {
 	
-	public boolean updateList = false;
+	private boolean updateList = false;
 	private int totalNumPilots;
 	
 	public void Barracks(){
@@ -23,15 +23,15 @@ public class Barracks {
 		System.out.println("3) Fire Pilot"); 
 		System.out.println("4) Quit and return to the Hanger");  
 		
-		int selection = new Scanner(System.in).nextInt();	
-		if (selection == 1){
-			System.out.printf("%-25s %-18s %-12s %-15s\n", "Firstname: ", "Lastname:", "Age:", "Years Experience:");
+		String selection = new Scanner(System.in).next();	
+		if (selection.charAt(0) == '1'){
+			System.out.printf("%-25s %-24s %-10s %-15s\n", "Firstname: ", "Lastname:", "Age:", "Years Experience:");
 			displayPilots(pilots);
 			Barracks(pilots, false);
 		}
-		else if (selection == 2) Barracks(pilots = hirePilot(pilots), false);			
-		else if (selection == 3) Barracks(pilots = firePilot(pilots), false);
-		else if (selection == 4) return;
+		else if (selection.charAt(0) == '2') Barracks(pilots = hirePilot(pilots), false);			
+		else if (selection.charAt(0) == '3') Barracks(pilots = firePilot(pilots), false);
+		else if (selection.charAt(0) == '4') return;
 		else {
 			System.out.println("Illegal Input. Re-enter selection.");
 			Barracks(pilots, false);
@@ -62,11 +62,19 @@ public class Barracks {
 		return modifyList(record, list, ID);       
 	}
 	
-	public void setPilotCount(int counter){
-		totalNumPilots += counter;
+	private void setPilotCount(int counter){
+		this.totalNumPilots += counter;
 	}
 	
-	public int getPilotCount(){
+	void setUpdateList(){
+		this.updateList = false;
+	}
+	
+	boolean getUpdatedList(){
+		return updateList;
+	}
+	
+	int getPilotCount(){
 		return totalNumPilots;
 	}
 	
@@ -98,7 +106,6 @@ public class Barracks {
 			return modifyList(record, newList, addDelete);
 		}
 		if (addDelete == -1) {
-			//name = name.toUpperCase().substring(0,1) + name.substring(1,name.length());	capitalizing first letter of name
 			list[getPilotCount()] = record;
 			setPilotCount(1);
 		}

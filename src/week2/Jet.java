@@ -22,61 +22,61 @@ public class Jet {
 		setPilot(pilot);
 	}
 	
-	public float convertToMach(float speedInMPH){
+	float convertToMach(float speedInMPH){
 		return speedInMPH*.00130332F;
 	}
 	
 	
-	public String getModel() {
+	String getModel() {
 		return model;
 	}
 
-	public void setModel(String model) {
+	void setModel(String model) {
 		this.model = model;
 	}
 
-	public float getSpeed() {
+	float getSpeed() {
 		return speed;
 	}
 
-	public void setSpeed(float speed) {
+	void setSpeed(float speed) {
 		this.speed = speed;
 	}
 
-	public float getRange() {
+	float getRange() {
 		return range;
 	}
 
-	public void setRange(float range) {
+	void setRange(float range) {
 		this.range = range;
 	}
 
-	public float getPrice() {
+	float getPrice() {
 		return price;
 	}
 
-	public void setPrice(float price) {
+	void setPrice(float price) {
 		this.price = price;
 	}
 
-	public int getCapacity() {
+	int getCapacity() {
 		return capacity;
 	}
 
-	public void setCapacity(int capacity) {
+	void setCapacity(int capacity) {
 		this.capacity = capacity;
 	}
 
-	public Pilot getPilot() {
+	Pilot getPilot() {
 		return pilot;
 	}
 
-	public void setPilot(Pilot pilot) {
+	void setPilot(Pilot pilot) {
 		if(pilot != null) this.pilot = pilot;
 		else {this.pilot = new Pilot(); this.pilot.setFirstname("N/A"); this.pilot.setLastname("N/A");}
 	}
 	
-	public boolean exists(){
+	boolean exists(){
 	
 		if(this.getModel() == null || this.getModel() == "" || this.getModel().length() == 0 ) return false;
 	
@@ -92,7 +92,6 @@ public class Jet {
 
 			System.out.printf("%-25s (M)%-2.2f/(MPH)%-11d %-10.2f $%-15.2f %-10d\n", model, convertToMach(getSpeed()), (int)getSpeed(), getRange(), (float)getPrice(), getCapacity());
 			pilot.display();
-
 		}
 	}
 

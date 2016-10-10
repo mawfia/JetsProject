@@ -2,9 +2,9 @@ package week2;
 import java.util.Scanner;
 
 public class Hanger {
-	int totalNumJets;
-	Barracks barracks = new Barracks();
-	Pilot[] pilots;
+	private int totalNumJets;
+	private Barracks barracks = new Barracks();
+	private Pilot[] pilots;
 
 	public void Hanger(){
 		Hanger(null, true);
@@ -13,9 +13,9 @@ public class Hanger {
 	public void Hanger (Jet[] jets, boolean start) {                
 		if(start && (jets == null || jets[0] == null || jets[0].exists() == false) ) jets = createFleet(0, true);
 		
-		if (barracks.updateList == true) for(int i = 0; i < getFleetCount(); i++) if ( barracks.searchPilotList(jets[i].pilot, pilots) == -1) { 
+		if (barracks.getUpdatedList() == true) for(int i = 0; i < getFleetCount(); i++) if ( barracks.searchPilotList(jets[i].pilot, pilots) == -1) { 
 			System.out.println(jets[i].pilot + ",\nIs no longer available for " + jets[i]); System.out.println( (jets[i].pilot = assignPilot(0)) + ", is now assigned.\n" );
-				barracks.updateList = false;
+				barracks.setUpdateList();
 			}
 		System.out.println("Select from the menu (1-6): ");        
 		System.out.println("1) List Fleet");        
@@ -26,7 +26,7 @@ public class Hanger {
 		System.out.println("6) Pilot Menu");
 		
 		String selection;
-		if( (selection = new Scanner(System.in).nextLine()).charAt(0) == '1' ){
+		if( (selection = new Scanner(System.in).next()).charAt(0) == '1' ){
 			displayFleet(jets);
 			Hanger(jets, false);
 		}
@@ -40,13 +40,13 @@ public class Hanger {
 			System.out.print("total fuel capacity (in pounds): "); record.setCapacity(new Scanner(System.in).nextInt());
 			System.out.print("Would you like to select the pilot? (Y/N): ");
 			do{
-				selection = new Scanner(System.in).nextLine().toUpperCase();
+				selection = new Scanner(System.in).next().toUpperCase();
 				if( selection.charAt(0) == 'N' ) { record.pilot = assignPilot(0); break; }
 				else if( selection.charAt(0) == 'Y' ) {
 					System.out.print("Enter pilot's first name: ");
-					record.pilot.setFirstname(new Scanner(System.in).nextLine());
+					record.pilot.setFirstname(new Scanner(System.in).next());
 					System.out.print("Enter pilot's last name: ");
-					record.pilot.setLastname(new Scanner(System.in).nextLine());
+					record.pilot.setLastname(new Scanner(System.in).next());
 					if( (record.pilot = assignPilot(barracks.searchPilotList(record.pilot, pilots))) != null) break;
 					else System.out.println("Pilot not found in database.");
 				} 
@@ -68,15 +68,15 @@ public class Hanger {
 		else Hanger();
 	}
 	
-	public void setFleetCount(int counter){
+	private void setFleetCount(int counter){
 		totalNumJets += counter;
 	}
 	
-	public int getFleetCount(){
+	int getFleetCount(){
 		return totalNumJets;
 	}
 	
-	public Jet[] modifyFleet(Jet record, Jet[] fleet, int addDelete){
+	private Jet[] modifyFleet(Jet record, Jet[] fleet, int addDelete){
 		if(getFleetCount() == fleet.length /*&& addDelete == -1*/) // increase fleet capacity by five if full
 		{
 			Jet[] newFleet = createFleet(fleet.length + 5, false);
@@ -88,7 +88,7 @@ public class Hanger {
 			fleet[getFleetCount()] = record;
 			setFleetCount(1);
 		}
-		else if (addDelete > -1 ) { // delete from fleet           				
+		else if (addDelete > -1 ) { // delete from fleet *** Not currently used ***          				
 			for (int k = addDelete; k < getFleetCount()-1; k++) fleet[k]=fleet[k+1];  
 			fleet[getFleetCount()-1] = new Jet();
 			setFleetCount(-1);
@@ -116,9 +116,9 @@ public class Hanger {
 	}
 	
 	
-	public Jet[] createFleet(int numJets, boolean initialize) {
+	private Jet[] createFleet(int numJets, boolean initialize) {
 			
-			if((barracks == null || barracks.getPilotCount() == 0) && initialize) pilots = barracks.Barracks(initialize);
+			if(( barracks == null || barracks.getPilotCount() == 0 ) && initialize) pilots = barracks.Barracks(initialize);
 			if(numJets == 0 && initialize )			
 			{
 					Jet[] initialFleet = new Jet[]	{ 				new Jet("GulStream G450", 670, 3000, 41000000, 4370, null),
@@ -128,12 +128,12 @@ public class Hanger {
 																	new Jet("Beechcraft Premier IA", 530, 1645, 7100000, 3670, null),
 																	new Jet("F-35 Lightening II", 1199, 1379, 148000000, 18500, null)};
 							setFleetCount(6);
-							initialFleet[0].pilot = assignPilot(0); 
-							initialFleet[1].pilot = assignPilot(0); 
-							initialFleet[3].pilot = assignPilot(0); 
-							initialFleet[2].pilot = assignPilot(0); 
-							initialFleet[4].pilot = assignPilot(0);
-							initialFleet[5].pilot = assignPilot(5);
+							initialFleet[0].setPilot(assignPilot(0));
+							initialFleet[1].setPilot(assignPilot(0)); 
+							initialFleet[3].setPilot(assignPilot(0)); 
+							initialFleet[2].setPilot(assignPilot(0)); 
+							initialFleet[4].setPilot(assignPilot(0));
+							initialFleet[5].setPilot(assignPilot(0));
 							return initialFleet;
 					
 			}
@@ -144,7 +144,7 @@ public class Hanger {
 			return fleet;
 	}
 	
-	public Pilot assignPilot(int i) {
+	private Pilot assignPilot(int i) {
 		if(i <= 0) 
 			if (i == 0 )return pilots[(int)((Math.random()*barracks.getPilotCount()))];
 			else return null;
